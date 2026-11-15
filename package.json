@@ -1,0 +1,34 @@
+{
+  "name": "campus-desk",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A fictional college department website published as an open agentic website: a manifest, three small agents, a browser runtime and a chat page.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "seed": "node scripts/seed-data.mjs",
+    "network": "tsx scripts/build-network.ts",
+    "check:style": "node scripts/check-style.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "build:site": "tsx scripts/build.ts",
+    "build": "npm run check:style && npm run typecheck && npm run build:site && npm run test",
+    "serve": "node scripts/serve.mjs dist 5173",
+    "serve:peer": "node scripts/serve.mjs dist-peer 5174",
+    "check": "tsx tools/agentic-check.ts",
+    "e2e": "node scripts/e2e.mjs",
+    "screenshots": "node scripts/screenshots.mjs",
+    "deck": "node scripts/deck.mjs"
+  },
+  "devDependencies": {
+    "@types/jsdom": "^30.0.0",
+    "@types/node": "^26.6.6",
+    "axe-core": "^4.14.0",
+    "esbuild": "^0.28.2",
+    "jsdom": "^31.0.1",
+    "puppeteer-core": "^25.17.0",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^5.1.0"
+  }
+}
