@@ -8,7 +8,7 @@ describe('checkSchema', () => {
     properties: { title: { type: 'string', minLength: 1, maxLength: 5 }, n: { type: 'integer', minimum: 1, maximum: 3 }, kind: { type: 'string', enum: ['a', 'b'] }, d: { type: 'string', pattern: '^\\d{4}$' } },
     required: ['title'],
     additionalProperties: false,
-  } as const;
+  };
   it('accepts a good value', () => expect(checkSchema(schema, { title: 'ok', n: 2, kind: 'a', d: '2026' })).toEqual([]));
   it('names every problem', () => {
     const errs = checkSchema(schema, { n: 9, kind: 'z', d: 'x', extra: 1 });

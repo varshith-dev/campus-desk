@@ -91,6 +91,8 @@ main:focus { outline: none; }
 
 .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr)); margin-top: 1rem; }
 .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1rem 1.1rem; box-shadow: var(--shadow); }
+.grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 48rem) { .grid.two { grid-template-columns: 1fr; } }
 .card.wide { grid-column: 1 / -1; }
 .hint { color: var(--muted); font-size: 0.9rem; }
 .empty { color: var(--muted); }

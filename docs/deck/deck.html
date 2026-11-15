@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Campus Desk: deck</title>
+<style>
+  @page { size: 1280px 720px; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: #e9ecf3; font-family: "Noto Sans", "Segoe UI", system-ui, sans-serif; color: #14181f; }
+  .slide { width: 1280px; height: 720px; padding: 56px 72px 48px; background: #fff; position: relative; overflow: hidden; page-break-after: always; break-after: page; margin: 0 auto 24px; display: flex; flex-direction: column; }
+  @media print { html, body { background: #fff; } .slide { margin: 0; } }
+  .kicker { color: #1d4ed8; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; font-size: 15px; margin: 0 0 10px; }
+  h1 { font-size: 56px; line-height: 1.08; margin: 0 0 18px; }
+  h2 { font-size: 40px; line-height: 1.12; margin: 0 0 22px; }
+  p, li { font-size: 24px; line-height: 1.4; }
+  .lead { font-size: 28px; color: #3b4352; max-width: 900px; margin: 0 0 20px; }
+  .foot { position: absolute; left: 72px; right: 72px; bottom: 22px; display: flex; justify-content: space-between; font-size: 14px; color: #5b6475; }
+  .row { display: flex; gap: 32px; align-items: flex-start; flex: 1; min-height: 0; }
+  .col { flex: 1; min-width: 0; }
+  img.shot { width: 100%; border: 1px solid #cfd6e4; border-radius: 12px; box-shadow: 0 10px 30px rgba(20,30,60,.15); display: block; }
+  .crop { overflow: hidden; border-radius: 12px; border: 1px solid #cfd6e4; box-shadow: 0 10px 30px rgba(20,30,60,.15); }
+  .crop img { width: 100%; display: block; }
+  .graphcrop { height: 200px; } .graphcrop img { margin-top: -152px; }
+  ul { margin: 0; padding-left: 26px; } li { margin: 0 0 12px; }
+  .pill { display: inline-block; background: #e8eefc; color: #1d3a8a; border-radius: 999px; padding: 4px 14px; font-size: 18px; font-weight: 600; margin: 0 8px 8px 0; }
+  .flow { display: flex; align-items: stretch; gap: 14px; margin: 8px 0 26px; }
+  .box { flex: 1; border: 2px solid #1d4ed8; border-radius: 14px; padding: 16px 18px; background: #f4f7ff; }
+  .box strong { display: block; font-size: 24px; margin-bottom: 6px; }
+  .box span { font-size: 18px; color: #3b4352; line-height: 1.35; display: block; }
+  .arrow { align-self: center; font-size: 34px; color: #1d4ed8; }
+  table { border-collapse: collapse; width: 100%; font-size: 21px; }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid #d9deea; vertical-align: top; }
+  th { background: #eef2fb; font-size: 18px; text-transform: uppercase; letter-spacing: .04em; }
+  .big { font-size: 64px; font-weight: 800; color: #1d4ed8; line-height: 1; }
+  .stat { flex: 1; border: 1px solid #cfd6e4; border-radius: 14px; padding: 18px 20px; }
+  .stat p { margin: 8px 0 0; font-size: 20px; color: #3b4352; line-height: 1.3; }
+  .three { display: flex; gap: 18px; margin-bottom: 22px; }
+  .note { font-size: 20px; color: #3b4352; }
+  code { font-family: "JetBrains Mono", "DejaVu Sans Mono", monospace; font-size: .85em; background: #eef1f7; padding: 1px 6px; border-radius: 5px; }
+</style>
+</head>
+<body>
+
+<section class="slide" id="s1">
+  <p class="kicker">Open Agentic Web Challenge</p>
+  <div class="row">
+    <div class="col" style="flex:1.05">
+      <h1>Campus Desk</h1>
+      <p class="lead">A college department website that other agents can use too.</p>
+      <p>Students ask in plain words. Small agents answer from the department's own timetable, notices, fee dates and exam dates, in the visitor's browser.</p>
+      <p style="margin-top:24px"><span class="pill">Manifest</span><span class="pill">Browser runtime</span><span class="pill">Bring your own key</span><span class="pill">Open source</span></p>
+      <p class="note">The department in this demo is made up. All sample data is marked as sample data.</p>
+    </div>
+    <div class="col" style="flex:1"><img class="shot" src="../screenshots/01-home.png" alt="Campus Desk home page"></div>
+  </div>
+  <div class="foot"><span>Campus Desk</span><span>1 of 6</span></div>
+</section>
+
+<section class="slide" id="s2">
+  <p class="kicker">The problem</p>
+  <h2>The answers exist. Nobody can ask for them.</h2>
+  <div class="row">
+    <div class="col">
+      <ul>
+        <li>"Is my 2 pm class on today?" The answer is in a group chat, a PDF, or a notice on a board.</li>
+        <li>"When is the fee due, and what is the late fee?" It depends on year and fee category.</li>
+        <li>"Is the library open late in exam weeks?" Another office, another page.</li>
+        <li>A department website is made for one person at a time. An agent cannot call it, and another site cannot reuse it.</li>
+      </ul>
+    </div>
+    <div class="col">
+      <div class="stat"><p style="margin:0;font-size:22px;color:#14181f"><strong>What a student needs</strong></p><p>One place to ask. Answers for their own year and section. A clear sign when a class is cancelled. A reminder they can keep.</p></div>
+      <div class="stat" style="margin-top:16px"><p style="margin:0;font-size:22px;color:#14181f"><strong>What the department needs</strong></p><p>A way to publish once and let any approved client use it, without running a server or sharing student data.</p></div>
+    </div>
+  </div>
+  <div class="foot"><span>Quality of the idea</span><span>2 of 6</span></div>
+</section>
+
+<section class="slide" id="s3">
+  <p class="kicker">How it works</p>
+  <h2>Publish files. The browser does the rest.</h2>
+  <div class="flow">
+    <div class="box"><strong>agent-manifest.json</strong><span>Names the network, the front agent, the router and the sites it may call.</span></div>
+    <div class="arrow">&rarr;</div>
+    <div class="box"><strong>campus_desk.network.json</strong><span>Four agents as plain data: front desk, timetable, notices, fees and exams.</span></div>
+    <div class="arrow">&rarr;</div>
+    <div class="box"><strong>Browser runtime</strong><span>Checks the network, runs the agents, asks before it contacts another site, stops at its limits.</span></div>
+    <div class="arrow">&rarr;</div>
+    <div class="box"><strong>Site actions</strong><span>Six small functions that read the department data. One writes a reminder, after a confirm card.</span></div>
+  </div>
+  <div class="row">
+    <div class="col"><ul>
+      <li>Model: a no-key demo mode, or the visitor's own Gemini key. The key stays in the browser.</li>
+      <li>Another site adds one URL to its own network and runs Campus Desk in its own browser.</li>
+    </ul></div>
+    <div class="col"><div class="crop graphcrop"><img src="../screenshots/09-for-agents.png" alt="Agent network graph"></div></div>
+  </div>
+  <div class="foot"><span>Technological implementation</span><span>3 of 6</span></div>
+</section>
+
+<section class="slide" id="s4">
+  <p class="kicker">The 60 second moment</p>
+  <h2>Ask, see the agents work, approve the write.</h2>
+  <div class="row">
+    <div class="col"><div class="crop"><img src="../screenshots/05-confirm-write.png" alt="Confirm card for saving a reminder"></div></div>
+    <div class="col"><div class="crop"><img src="../screenshots/06-consent-other-site.png" alt="Consent card before another site runs"></div></div>
+  </div>
+  <p class="note" style="margin-top:18px">Left: the app asks before it saves a reminder, and shows the exact action. Right: it asks before it runs another site's agents here, names the site, and lists what that site never receives.</p>
+  <div class="foot"><span>Design, and technological implementation</span><span>4 of 6</span></div>
+</section>
+
+<section class="slide" id="s5">
+  <p class="kicker">Safe by design</p>
+  <h2>The seven checks in the spec, each one tested.</h2>
+  <table>
+    <thead><tr><th>Check</th><th>How Campus Desk shows it</th></tr></thead>
+    <tbody>
+      <tr><td>Publish two agents</td><td>Four agents, plain JSON, passes the reference validator</td></tr>
+      <tr><td>Default and own-key routers</td><td>Demo model by default, Gemini key in settings</td></tr>
+      <tr><td>Agent plus a site action</td><td>Timetable agent calls the timetable action</td></tr>
+      <tr><td>Peer loads after approval</td><td>Library site runs here after one click</td></tr>
+      <tr><td>Key never reaches the peer</td><td>Test records every request and its headers</td></tr>
+      <tr><td>Private context stays home</td><td>Saved class never leaves unless a network names it</td></tr>
+      <tr><td>Stop bad input visibly</td><td>Bad network, cycle, over budget, denied site</td></tr>
+    </tbody>
+  </table>
+  <div class="foot"><span>Technological implementation</span><span>5 of 6</span></div>
+</section>
+
+<section class="slide" id="s6">
+  <p class="kicker">Open and reusable</p>
+  <h2>Any department can adapt it.</h2>
+  <div class="three">
+    <div class="stat"><div class="big">232</div><p>unit and interop tests</p></div>
+    <div class="stat"><div class="big">47</div><p>real browser checks, including accessibility on every page in light and dark</p></div>
+    <div class="stat"><div class="big">14</div><p>checks in <code>agentic-check</code>, a command anyone can run on any site</p></div>
+  </div>
+  <ul>
+    <li>Apache 2.0. Replace <code>public/data/*.json</code>, run the build, publish the folder.</li>
+    <li><code>agentic-check</code> tests any site's published files against the spec. We share it with the community.</li>
+    <li>Honest limits: demo mode is rule based, not a language model. Other sites get a published snapshot, not live actions.</li>
+  </ul>
+  <div class="foot"><span>Potential impact</span><span>6 of 6</span></div>
+</section>
+
+</body>
+</html>

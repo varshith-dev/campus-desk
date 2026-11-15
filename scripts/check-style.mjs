@@ -11,7 +11,7 @@ const EM_DASH = String.fromCharCode(0x2014);
 
 // Words that must never appear in this project. Stored reversed so this file does not contain them.
 const rev = (w) => [...w].reverse().join('');
-const BANNED = ['ugulet', 'syawkcah', 'sneqo', 'duolc ohce', 'ogvurt', 'tahcxert', 'ia rof mv duolc', 'oiduts etile', 'shcnuba'].map(rev);
+const BANNED = ['ugulet', 'syawkcah', 'sneqo', 'duolc ohce', 'ogvurt', 'tahcxert', 'ia rof mv duolc', 'oiduts etile', 'shcnuba', 'ydder allam', 'ydder-allam', 'ydderallam'].map(rev);
 const BUZZ = ['leverage', 'seamless', 'revolutionary', 'cutting-edge', 'game-changing', 'game changer', 'supercharge', 'empower', 'synergy', 'next-generation', 'best-in-class', 'unlock the power', 'state-of-the-art', 'paradigm', 'robust', 'holistic', 'delve', 'tapestry'];
 
 export function scan() {

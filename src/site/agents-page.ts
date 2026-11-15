@@ -8,7 +8,7 @@ export async function initAgents(base: string): Promise<void> {
     const manifest = (await (await fetch(new URL('agent-manifest.json', base))).json()) as Manifest;
     const entry = manifest.networks[0]!;
     const network = await (await fetch(new URL(entry.hocon, base))).json();
-    const runtime = await fetch(new URL('runtime/agentic-runtime.js', base), { method: 'GET' }).then((r) => r.ok, () => false);
+    const runtime = await fetch(new URL('runtime/agentic-runtime.js', base)).then(async (r) => (r.ok ? (await r.arrayBuffer()).byteLength > 1000 : false), () => false);
     const checks = runChecks(manifest, network, runtime);
     list.replaceChildren(
       ...checks.map((c) => {

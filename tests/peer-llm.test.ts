@@ -98,7 +98,7 @@ describe('llm client and bring-your-own-key', () => {
 
   it('never puts the key in an error message, even when the router echoes it', async () => {
     const c = new OpenAICompatClient({ baseUrl: 'https://r.example/v1', model: 'm', apiKey: 'KEY-ABCDEF-123', kind: 'byok', fetchImpl: (async () => new Response('bad key KEY-ABCDEF-123 for Bearer KEY-ABCDEF-123', { status: 401 })) as typeof fetch });
-    const err = await c.chat({ messages: [], tools: [], agent: 'a' }).catch((e) => e as Error);
+    const err = (await c.chat({ messages: [], tools: [], agent: 'a' }).catch((e) => e)) as Error;
     expect(err.message).toMatch(/HTTP 401/);
     expect(err.message).not.toContain('KEY-ABCDEF-123');
   });

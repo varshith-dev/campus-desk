@@ -68,7 +68,7 @@ describe.each(Object.entries(pages))('page %s', (name, html) => {
     for (const b of doc.querySelectorAll('button')) expect(b.getAttribute('type') ?? (b.closest('form') ? 'submit' : 'button')).toBeTruthy();
     for (const a of doc.querySelectorAll('a')) expect((a.textContent ?? '').trim().length + (a.getAttribute('aria-label') ?? '').length).toBeGreaterThan(0);
   });
-  it('says it is sample data on every page', () => expect(doc.querySelector('[role=note]')!.textContent).toMatch(/Sample data/));
+  it('says it is sample data on every page', () => expect(doc.querySelector('.sample-note')!.textContent).toMatch(/Sample data/));
   it('links the manifest', () => expect(doc.querySelector('link[href="agent-manifest.json"]')).not.toBeNull());
 });
 

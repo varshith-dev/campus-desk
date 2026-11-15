@@ -59,7 +59,7 @@ function layout(v: View, page: PageId, title: string, main: string, extraScript 
     <span class="clock" title="The sample site clock is fixed so the demo gives the same answers every time.">Sample clock: ${esc(formatDate(v.today))}, ${esc(v.now.split('T')[1] ?? '')}</span>
   </form>
 </header>
-<div class="sample-note" role="note"><strong>Sample data.</strong> ${esc(d.disclaimer)}</div>
+<section class="sample-note" aria-label="Sample data notice"><strong>Sample data.</strong> ${esc(d.disclaimer)}</section>
 <main id="main" tabindex="-1">
 ${main}
 </main>
@@ -85,7 +85,7 @@ export function homePage(v: View): string {
   <p class="lead">Ask for today's classes, a fee due date or the latest exam notice in plain words. Campus Desk is a few small agents that run in your browser, and any other agentic site can call them too.</p>
   <p class="cta"><a class="btn primary" href="ask.html">Ask Campus Desk</a> <a class="btn" href="agents.html">See what agents can call</a></p>
 </section>
-<div class="grid">
+<div class="grid two">
   <section class="card" aria-labelledby="h-today"><h2 id="h-today">Today</h2><div id="today">${renderToday(v)}</div></section>
   <section class="card" aria-labelledby="h-due"><h2 id="h-due">Coming up</h2><div id="due">${renderDueSoon(v)}</div><p><a href="fees-exams.html">All fees and exams</a></p></section>
   <section class="card wide" aria-labelledby="h-latest"><h2 id="h-latest">Latest notices</h2><div id="latest">${renderNoticeList(v, { limit: 3 })}</div><p><a href="notices.html">All notices</a></p></section>
