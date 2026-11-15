@@ -1,0 +1,586 @@
+{
+  "semester": "Autumn 2026",
+  "slots": {
+    "a": [
+      "09:00",
+      "09:50"
+    ],
+    "b": [
+      "10:00",
+      "10:50"
+    ],
+    "c": [
+      "11:15",
+      "12:05"
+    ],
+    "d": [
+      "12:15",
+      "13:05"
+    ],
+    "lab": [
+      "14:00",
+      "16:50"
+    ]
+  },
+  "courses": [
+    {
+      "code": "CS201",
+      "name": "Data Structures",
+      "year": 2,
+      "faculty": "Dr. R. Menon"
+    },
+    {
+      "code": "CS202",
+      "name": "Digital Logic",
+      "year": 2,
+      "faculty": "Prof. A. Kapoor"
+    },
+    {
+      "code": "CS203",
+      "name": "Discrete Mathematics",
+      "year": 2,
+      "faculty": "Dr. S. Banerjee"
+    },
+    {
+      "code": "CS204",
+      "name": "Object-Oriented Programming",
+      "year": 2,
+      "faculty": "Prof. L. Fernandes"
+    },
+    {
+      "code": "MA201",
+      "name": "Probability and Statistics",
+      "year": 2,
+      "faculty": "Dr. P. Nair"
+    },
+    {
+      "code": "CS201L",
+      "name": "Data Structures Lab",
+      "year": 2,
+      "faculty": "Prof. L. Fernandes",
+      "lab": true
+    },
+    {
+      "code": "CS301",
+      "name": "Operating Systems",
+      "year": 3,
+      "faculty": "Dr. K. Rao"
+    },
+    {
+      "code": "CS302",
+      "name": "Database Systems",
+      "year": 3,
+      "faculty": "Dr. M. Thomas"
+    },
+    {
+      "code": "CS303",
+      "name": "Computer Networks",
+      "year": 3,
+      "faculty": "Prof. D. Sharma"
+    },
+    {
+      "code": "CS304",
+      "name": "Software Engineering",
+      "year": 3,
+      "faculty": "Prof. N. Joshi"
+    },
+    {
+      "code": "HS301",
+      "name": "Technical Communication",
+      "year": 3,
+      "faculty": "Dr. V. Pillai"
+    },
+    {
+      "code": "CS302L",
+      "name": "Database Lab",
+      "year": 3,
+      "faculty": "Dr. M. Thomas",
+      "lab": true
+    }
+  ],
+  "timetables": [
+    {
+      "year": 2,
+      "section": "A",
+      "days": {
+        "Mon": [
+          {
+            "start": "09:00",
+            "end": "09:50",
+            "course": "CS201",
+            "room": "C-201"
+          },
+          {
+            "start": "10:00",
+            "end": "10:50",
+            "course": "CS203",
+            "room": "C-201"
+          },
+          {
+            "start": "11:15",
+            "end": "12:05",
+            "course": "MA201",
+            "room": "C-201"
+          },
+          {
+            "start": "14:00",
+            "end": "16:50",
+            "course": "CS201L",
+            "room": "Lab 2"
+          }
+        ],
+        "Tue": [
+          {
+            "start": "09:00",
+            "end": "09:50",
+            "course": "CS202",
+            "room": "C-201"
+          },
+          {
+            "start": "10:00",
+            "end": "10:50",
+            "course": "CS201",
+            "room": "C-201"
+          },
+          {
+            "start": "11:15",
+            "end": "12:05",
+            "course": "CS204",
+            "room": "C-201"
+          }
+        ],
+        "Wed": [
+          {
+            "start": "09:00",
+            "end": "09:50",
+            "course": "CS203",
+            "room": "C-201"
+          },
+          {
+            "start": "10:00",
+            "end": "10:50",
+            "course": "CS204",
+            "room": "C-201"
+          },
+          {
+            "start": "11:15",
+            "end": "12:05",
+            "course": "CS202",
+            "room": "C-201"
+          },
+          {
+            "start": "12:15",
+            "end": "13:05",
+            "course": "MA201",
+            "room": "C-201"
+          }
+        ],
+        "Thu": [
+          {
+            "start": "09:00",
+            "end": "09:50",
+            "course": "MA201",
+            "room": "C-201"
+          },
+          {
+            "start": "10:00",
+            "end": "10:50",
+            "course": "CS202",
+            "room": "C-201"
+          },
+          {
+            "start": "14:00",
+            "end": "16:50",
+            "course": "CS201L",
+            "room": "Lab 2"
+          }
+        ],
+        "Fri": [
+          {
+            "start": "09:00",
+            "end": "09:50",
+            "course": "CS204",
+            "room": "C-201"
+          },
+          {
+            "start": "10:00",
+            "end": "10:50",
+            "course": "CS203",
+            "room": "C-201"
+          },
+          {
+            "start": "11:15",
+            "end": "12:05",
+            "course": "CS201",
+            "room": "C-201"
+          }
+        ]
+      }
+    },
+    {
+      "year": 2,
+      "section": "B",
+      "days": {
+        "Mon": [
+          {
+            "start": "09:00",
+            "end": "09:50",
+            "course": "CS203",
+            "room": "C-202"
+          },
+          {
+            "start": "10:00",
+            "end": "10:50",
+            "course": "CS201",
+            "room": "C-202"
+          },
+          {
+            "start": "11:15",
+            "end": "12:05",
+            "course": "CS204",
+            "room": "C-202"
+          }
+        ],
+        "Tue": [
+          {
+            "start": "09:00",
+            "end": "09:50",
+            "course": "MA201",
+            "room": "C-202"
+          },
+          {
+            "start": "10:00",
+            "end": "10:50",
+            "course": "CS202",
+            "room": "C-202"
+          },
+          {
+            "start": "14:00",
+            "end": "16:50",
+            "course": "CS201L",
+            "room": "Lab 3"
+          }
+        ],
+        "Wed": [
+          {
+            "start": "09:00",
+            "end": "09:50",
+            "course": "CS201",
+            "room": "C-202"
+          },
+          {
+            "start": "10:00",
+            "end": "10:50",
+            "course": "CS203",
+            "room": "C-202"
+          },
+          {
+            "start": "11:15",
+            "end": "12:05",
+            "course": "MA201",
+            "room": "C-202"
+          }
+        ],
+        "Thu": [
+          {
+            "start": "09:00",
+            "end": "09:50",
+            "course": "CS204",
+            "room": "C-202"
+          },
+          {
+            "start": "10:00",
+            "end": "10:50",
+            "course": "CS201",
+            "room": "C-202"
+          },
+          {
+            "start": "11:15",
+            "end": "12:05",
+            "course": "CS202",
+            "room": "C-202"
+          },
+          {
+            "start": "12:15",
+            "end": "13:05",
+            "course": "CS203",
+            "room": "C-202"
+          }
+        ],
+        "Fri": [
+          {
+            "start": "09:00",
+            "end": "09:50",
+            "course": "CS202",
+            "room": "C-202"
+          },
+          {
+            "start": "10:00",
+            "end": "10:50",
+            "course": "MA201",
+            "room": "C-202"
+          },
+          {
+            "start": "14:00",
+            "end": "16:50",
+            "course": "CS201L",
+            "room": "Lab 3"
+          }
+        ]
+      }
+    },
+    {
+      "year": 3,
+      "section": "A",
+      "days": {
+        "Mon": [
+          {
+            "start": "09:00",
+            "end": "09:50",
+            "course": "CS301",
+            "room": "C-301"
+          },
+          {
+            "start": "10:00",
+            "end": "10:50",
+            "course": "CS302",
+            "room": "C-301"
+          },
+          {
+            "start": "11:15",
+            "end": "12:05",
+            "course": "CS303",
+            "room": "C-301"
+          }
+        ],
+        "Tue": [
+          {
+            "start": "09:00",
+            "end": "09:50",
+            "course": "CS304",
+            "room": "C-301"
+          },
+          {
+            "start": "10:00",
+            "end": "10:50",
+            "course": "CS301",
+            "room": "C-301"
+          },
+          {
+            "start": "14:00",
+            "end": "16:50",
+            "course": "CS302L",
+            "room": "Lab 4"
+          }
+        ],
+        "Wed": [
+          {
+            "start": "09:00",
+            "end": "09:50",
+            "course": "CS302",
+            "room": "C-301"
+          },
+          {
+            "start": "10:00",
+            "end": "10:50",
+            "course": "CS303",
+            "room": "C-301"
+          },
+          {
+            "start": "11:15",
+            "end": "12:05",
+            "course": "HS301",
+            "room": "C-301"
+          },
+          {
+            "start": "12:15",
+            "end": "13:05",
+            "course": "CS304",
+            "room": "C-301"
+          }
+        ],
+        "Thu": [
+          {
+            "start": "09:00",
+            "end": "09:50",
+            "course": "CS303",
+            "room": "C-301"
+          },
+          {
+            "start": "10:00",
+            "end": "10:50",
+            "course": "CS304",
+            "room": "C-301"
+          },
+          {
+            "start": "11:15",
+            "end": "12:05",
+            "course": "CS301",
+            "room": "C-301"
+          }
+        ],
+        "Fri": [
+          {
+            "start": "09:00",
+            "end": "09:50",
+            "course": "HS301",
+            "room": "C-301"
+          },
+          {
+            "start": "10:00",
+            "end": "10:50",
+            "course": "CS302",
+            "room": "C-301"
+          },
+          {
+            "start": "14:00",
+            "end": "16:50",
+            "course": "CS302L",
+            "room": "Lab 4"
+          }
+        ]
+      }
+    },
+    {
+      "year": 3,
+      "section": "B",
+      "days": {
+        "Mon": [
+          {
+            "start": "09:00",
+            "end": "09:50",
+            "course": "CS302",
+            "room": "C-302"
+          },
+          {
+            "start": "10:00",
+            "end": "10:50",
+            "course": "CS304",
+            "room": "C-302"
+          },
+          {
+            "start": "14:00",
+            "end": "16:50",
+            "course": "CS302L",
+            "room": "Lab 5"
+          }
+        ],
+        "Tue": [
+          {
+            "start": "09:00",
+            "end": "09:50",
+            "course": "CS303",
+            "room": "C-302"
+          },
+          {
+            "start": "10:00",
+            "end": "10:50",
+            "course": "CS302",
+            "room": "C-302"
+          },
+          {
+            "start": "11:15",
+            "end": "12:05",
+            "course": "CS301",
+            "room": "C-302"
+          }
+        ],
+        "Wed": [
+          {
+            "start": "09:00",
+            "end": "09:50",
+            "course": "CS301",
+            "room": "C-302"
+          },
+          {
+            "start": "10:00",
+            "end": "10:50",
+            "course": "HS301",
+            "room": "C-302"
+          },
+          {
+            "start": "11:15",
+            "end": "12:05",
+            "course": "CS304",
+            "room": "C-302"
+          }
+        ],
+        "Thu": [
+          {
+            "start": "09:00",
+            "end": "09:50",
+            "course": "CS304",
+            "room": "C-302"
+          },
+          {
+            "start": "10:00",
+            "end": "10:50",
+            "course": "CS303",
+            "room": "C-302"
+          },
+          {
+            "start": "11:15",
+            "end": "12:05",
+            "course": "CS302",
+            "room": "C-302"
+          },
+          {
+            "start": "12:15",
+            "end": "13:05",
+            "course": "CS301",
+            "room": "C-302"
+          }
+        ],
+        "Fri": [
+          {
+            "start": "09:00",
+            "end": "09:50",
+            "course": "CS303",
+            "room": "C-302"
+          },
+          {
+            "start": "10:00",
+            "end": "10:50",
+            "course": "CS301",
+            "room": "C-302"
+          },
+          {
+            "start": "11:15",
+            "end": "12:05",
+            "course": "HS301",
+            "room": "C-302"
+          }
+        ]
+      }
+    }
+  ],
+  "changes": [
+    {
+      "date": "2026-11-18",
+      "year": 2,
+      "section": "A",
+      "course": "CS203",
+      "kind": "cancelled",
+      "detail": "The faculty member is on leave. Notes will be posted on the notice board."
+    },
+    {
+      "date": "2026-11-19",
+      "year": 3,
+      "section": "all",
+      "course": "CS303",
+      "kind": "room",
+      "detail": "Moved to room C-305 because of projector repair.",
+      "new_room": "C-305"
+    },
+    {
+      "date": "2026-11-20",
+      "year": 2,
+      "section": "B",
+      "course": "CS204",
+      "kind": "time",
+      "detail": "Moved to 14:00 to 14:50 in room C-202 for the tech talk.",
+      "new_start": "14:00",
+      "new_end": "14:50"
+    }
+  ]
+}

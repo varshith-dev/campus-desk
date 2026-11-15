@@ -1,0 +1,114 @@
+{
+  "hall_ticket_release": "2026-12-07",
+  "rules": "Carry your student ID and hall ticket. Phones stay in your bag, switched off.",
+  "exams": [
+    {
+      "year": 2,
+      "course": "CS201L",
+      "type": "Lab practical",
+      "date": "2026-11-25",
+      "start": "10:00",
+      "end": "13:00",
+      "venue": "Lab 2 and Lab 3"
+    },
+    {
+      "year": 3,
+      "course": "CS302L",
+      "type": "Lab practical",
+      "date": "2026-11-26",
+      "start": "10:00",
+      "end": "13:00",
+      "venue": "Lab 4 and Lab 5"
+    },
+    {
+      "year": 2,
+      "course": "CS201",
+      "type": "End-semester",
+      "date": "2026-12-14",
+      "start": "10:00",
+      "end": "13:00",
+      "venue": "Exam Hall A"
+    },
+    {
+      "year": 3,
+      "course": "CS301",
+      "type": "End-semester",
+      "date": "2026-12-15",
+      "start": "10:00",
+      "end": "13:00",
+      "venue": "Exam Hall B"
+    },
+    {
+      "year": 2,
+      "course": "CS203",
+      "type": "End-semester",
+      "date": "2026-12-16",
+      "start": "10:00",
+      "end": "13:00",
+      "venue": "Exam Hall A"
+    },
+    {
+      "year": 3,
+      "course": "CS302",
+      "type": "End-semester",
+      "date": "2026-12-17",
+      "start": "10:00",
+      "end": "13:00",
+      "venue": "Exam Hall B"
+    },
+    {
+      "year": 2,
+      "course": "CS202",
+      "type": "End-semester",
+      "date": "2026-12-18",
+      "start": "10:00",
+      "end": "13:00",
+      "venue": "Exam Hall A"
+    },
+    {
+      "year": 3,
+      "course": "CS303",
+      "type": "End-semester",
+      "date": "2026-12-19",
+      "start": "10:00",
+      "end": "13:00",
+      "venue": "Exam Hall B"
+    },
+    {
+      "year": 2,
+      "course": "CS204",
+      "type": "End-semester",
+      "date": "2026-12-21",
+      "start": "10:00",
+      "end": "13:00",
+      "venue": "Exam Hall A"
+    },
+    {
+      "year": 3,
+      "course": "CS304",
+      "type": "End-semester",
+      "date": "2026-12-22",
+      "start": "10:00",
+      "end": "13:00",
+      "venue": "Exam Hall B"
+    },
+    {
+      "year": 2,
+      "course": "MA201",
+      "type": "End-semester",
+      "date": "2026-12-23",
+      "start": "14:00",
+      "end": "17:00",
+      "venue": "Exam Hall A"
+    },
+    {
+      "year": 3,
+      "course": "HS301",
+      "type": "End-semester",
+      "date": "2026-12-23",
+      "start": "14:00",
+      "end": "17:00",
+      "venue": "Exam Hall B"
+    }
+  ]
+}

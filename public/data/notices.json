@@ -1,0 +1,145 @@
+{
+  "notices": [
+    {
+      "id": "n-01",
+      "date": "2026-11-14",
+      "category": "exams",
+      "years": [
+        2,
+        3
+      ],
+      "title": "End-semester exam timetable published",
+      "body": "The end-semester exams run from 14 to 23 December 2026. The full dates are on the Fees and exams page. Hall tickets are given out from 7 December."
+    },
+    {
+      "id": "n-02",
+      "date": "2026-11-13",
+      "category": "fees",
+      "years": [
+        2,
+        3
+      ],
+      "title": "Tuition installment 2 is due on 30 November",
+      "body": "Pay at the accounts window or online. A late fee applies for each day after the due date. Scholarship students should check the amount for their category.",
+      "deadline": "2026-11-30"
+    },
+    {
+      "id": "n-03",
+      "date": "2026-11-12",
+      "category": "academic",
+      "years": [
+        3
+      ],
+      "title": "Project review week for Year 3",
+      "body": "Reviews for the software engineering projects run from 23 to 27 November. Teams get their slot by email from the project coordinator.",
+      "deadline": "2026-11-23"
+    },
+    {
+      "id": "n-04",
+      "date": "2026-11-10",
+      "category": "events",
+      "years": [
+        2,
+        3
+      ],
+      "title": "Tech talk: how a database reads your query",
+      "body": "A guest talk on query plans, on 20 November at 15:00 in the seminar hall. All years can attend. Year 2 section B has one class moved to 14:00 that day.",
+      "deadline": "2026-11-20"
+    },
+    {
+      "id": "n-05",
+      "date": "2026-11-09",
+      "category": "placement",
+      "years": [
+        3
+      ],
+      "title": "Resume workshop for Year 3",
+      "body": "A hands-on session on writing a one-page resume, on 24 November at 16:00 in room C-301. Bring a printed draft.",
+      "deadline": "2026-11-24"
+    },
+    {
+      "id": "n-06",
+      "date": "2026-11-08",
+      "category": "admin",
+      "years": [
+        2,
+        3
+      ],
+      "title": "Hall tickets: collect from the department office",
+      "body": "Hall tickets are given out from 7 December. Bring your student ID. The exam fee must be paid first.",
+      "deadline": "2026-12-07"
+    },
+    {
+      "id": "n-07",
+      "date": "2026-11-06",
+      "category": "academic",
+      "years": [
+        2,
+        3
+      ],
+      "title": "Lab practical exams start on 25 November",
+      "body": "Data Structures Lab (Year 2) is on 25 November and Database Lab (Year 3) is on 26 November. Carry your lab record.",
+      "deadline": "2026-11-25"
+    },
+    {
+      "id": "n-08",
+      "date": "2026-11-05",
+      "category": "fees",
+      "years": [
+        2,
+        3
+      ],
+      "title": "Scholarship students: renew your income certificate",
+      "body": "Submit the renewed certificate to the department office by 28 November, or the installment waiver will not be applied.",
+      "deadline": "2026-11-28"
+    },
+    {
+      "id": "n-09",
+      "date": "2026-11-03",
+      "category": "events",
+      "years": [
+        2,
+        3
+      ],
+      "title": "Department club hack night on 6 December",
+      "body": "An overnight build session in the labs, from 18:00 on 6 December. Teams of up to four. Sign up with the club coordinators.",
+      "deadline": "2026-12-05"
+    },
+    {
+      "id": "n-10",
+      "date": "2026-11-02",
+      "category": "academic",
+      "years": [
+        2,
+        3
+      ],
+      "title": "Attendance shortage list is on the notice board",
+      "body": "Students below 75 percent attendance can submit a condonation form with a reason by 24 November.",
+      "deadline": "2026-11-24"
+    },
+    {
+      "id": "n-11",
+      "date": "2026-10-28",
+      "category": "admin",
+      "years": [
+        2,
+        3
+      ],
+      "title": "Department office closed on 27 November",
+      "body": "The office is closed for the whole day for maintenance. Submit anything due that week by 26 November.",
+      "deadline": "2026-11-27"
+    },
+    {
+      "id": "n-12",
+      "date": "2026-10-25",
+      "category": "exams",
+      "years": [
+        2,
+        3
+      ],
+      "title": "Mid-term revaluation window closes on 21 November",
+      "body": "Apply for revaluation at the office with the fee receipt. Late forms are not taken.",
+      "deadline": "2026-11-21"
+    }
+  ]
+}

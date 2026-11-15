@@ -1,0 +1,60 @@
+{
+  "categories": [
+    "general",
+    "scholarship",
+    "sponsored"
+  ],
+  "items": [
+    {
+      "id": "tuition-2",
+      "name": "Tuition, installment 2",
+      "years": [
+        2,
+        3
+      ],
+      "due": "2026-11-30",
+      "amounts": {
+        "general": 42500,
+        "scholarship": 0,
+        "sponsored": 21250
+      },
+      "late_fee_per_day": 100,
+      "late_fee_cap": 1000,
+      "note": "Scholarship students pay nothing if the income certificate is renewed by 28 November."
+    },
+    {
+      "id": "exam-fee",
+      "name": "End-semester exam fee",
+      "years": [
+        2,
+        3
+      ],
+      "due": "2026-11-25",
+      "amounts": {
+        "general": 1800,
+        "scholarship": 1800,
+        "sponsored": 1800
+      },
+      "late_fee_per_day": 200,
+      "late_fee_cap": 1000,
+      "note": "The receipt is needed to collect the hall ticket."
+    },
+    {
+      "id": "lab-fee-3",
+      "name": "Database lab consumables",
+      "years": [
+        3
+      ],
+      "due": "2026-11-30",
+      "amounts": {
+        "general": 1200,
+        "scholarship": 1200,
+        "sponsored": 1200
+      },
+      "late_fee_per_day": 50,
+      "late_fee_cap": 500,
+      "note": "Year 3 only."
+    }
+  ],
+  "currency": "Rs"
+}

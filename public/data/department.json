@@ -1,0 +1,37 @@
+{
+  "sample": true,
+  "institute": "Eastbrook Institute of Technology",
+  "department": "Department of Computer Science and Engineering",
+  "short": "EIT CSE",
+  "semester": "Autumn 2026",
+  "sample_today": "2026-11-16",
+  "sample_now": "2026-11-16T10:20",
+  "disclaimer": "Eastbrook Institute of Technology is a made-up place. Every name, date, room and amount on this site is sample data.",
+  "office": {
+    "place": "Block C, Room 104",
+    "hours": "Monday to Friday, 10:00 to 16:00",
+    "email": "cse-office@eastbrook.example"
+  },
+  "years": [
+    2,
+    3
+  ],
+  "sections": [
+    "A",
+    "B"
+  ],
+  "fee_categories": [
+    {
+      "id": "general",
+      "label": "General"
+    },
+    {
+      "id": "scholarship",
+      "label": "Scholarship"
+    },
+    {
+      "id": "sponsored",
+      "label": "Employer sponsored"
+    }
+  ]
+}
