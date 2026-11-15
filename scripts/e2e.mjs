@@ -12,7 +12,7 @@ const root = join(import.meta.dirname, '..');
 const axeSource = readFileSync(require.resolve('axe-core/axe.min.js'), 'utf8');
 const SITE = 'http://localhost:5173';
 const PEER = 'http://localhost:5174';
-const FAKE_KEY = 'AIzaFAKEKEYFORTESTS0000000000000000000';
+const FAKE_KEY = 'FAKE-KEY-FOR-TESTS-0000000000000000';
 
 const results = [];
 let failures = 0;
@@ -280,7 +280,7 @@ const activity = (page) => page.$$eval('#activity li', (n) => n.map((x) => x.tex
     await page.click('#delete-key');
     await page.waitForFunction(() => /Demo mode/.test(document.getElementById('mode')?.textContent ?? ''));
     const stored = await page.evaluate(() => JSON.stringify({ ...localStorage }));
-    must(!stored.includes('AIza'), 'key left in storage');
+    must(!stored.includes('FAKE-KEY'), 'key left in storage');
   });
   await step('an unreachable router gives a readable error, not a crash', async () => {
     await page.evaluate((key) => localStorage.setItem('campus-desk:ai-profile:v1', JSON.stringify({ presetId: 'custom', baseUrl: 'http://127.0.0.1:9/v1', model: 'm', apiKey: key })), FAKE_KEY);
