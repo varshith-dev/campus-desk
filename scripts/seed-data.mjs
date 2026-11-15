@@ -80,7 +80,7 @@ const timetables = Object.entries(weekly).map(([key, days]) => ({ year: Number(k
 const changes = [
   { date: '2026-11-18', year: 2, section: 'A', course: 'CS203', kind: 'cancelled', detail: 'The faculty member is on leave. Notes will be posted on the notice board.' },
   { date: '2026-11-19', year: 3, section: 'all', course: 'CS303', kind: 'room', detail: 'Moved to room C-305 because of projector repair.', new_room: 'C-305' },
-  { date: '2026-11-20', year: 2, section: 'B', course: 'CS204', kind: 'time', detail: 'Moved to 14:00 to 14:50 in room C-202 for the tech talk.', new_start: '14:00', new_end: '14:50' },
+  { date: '2026-11-20', year: 2, section: 'B', course: 'MA201', kind: 'time', detail: 'Moved to 14:00 to 14:50 in room C-202 because the faculty member is at a conference in the morning.', new_start: '14:00', new_end: '14:50' },
 ];
 
 write('timetable.json', { semester: 'Autumn 2026', slots: S, courses, timetables, changes });
@@ -89,7 +89,7 @@ const notices = [
   { id: 'n-01', date: '2026-11-14', category: 'exams', years: [2, 3], title: 'End-semester exam timetable published', body: 'The end-semester exams run from 14 to 23 December 2026. The full dates are on the Fees and exams page. Hall tickets are given out from 7 December.' },
   { id: 'n-02', date: '2026-11-13', category: 'fees', years: [2, 3], title: 'Tuition installment 2 is due on 30 November', body: 'Pay at the accounts window or online. A late fee applies for each day after the due date. Scholarship students should check the amount for their category.', deadline: '2026-11-30' },
   { id: 'n-03', date: '2026-11-12', category: 'academic', years: [3], title: 'Project review week for Year 3', body: 'Reviews for the software engineering projects run from 23 to 27 November. Teams get their slot by email from the project coordinator.', deadline: '2026-11-23' },
-  { id: 'n-04', date: '2026-11-10', category: 'events', years: [2, 3], title: 'Tech talk: how a database reads your query', body: 'A guest talk on query plans, on 20 November at 15:00 in the seminar hall. All years can attend. Year 2 section B has one class moved to 14:00 that day.', deadline: '2026-11-20' },
+  { id: 'n-04', date: '2026-11-10', category: 'events', years: [2, 3], title: 'Tech talk: how a database reads your query', body: 'A guest talk on query plans, on 20 November at 15:00 in the seminar hall. All years can attend. Year 2 section B has one class moved to 14:00 that day, so it does not clash.', deadline: '2026-11-20' },
   { id: 'n-05', date: '2026-11-09', category: 'placement', years: [3], title: 'Resume workshop for Year 3', body: 'A hands-on session on writing a one-page resume, on 24 November at 16:00 in room C-301. Bring a printed draft.', deadline: '2026-11-24' },
   { id: 'n-06', date: '2026-11-08', category: 'admin', years: [2, 3], title: 'Hall tickets: collect from the department office', body: 'Hall tickets are given out from 7 December. Bring your student ID. The exam fee must be paid first.', deadline: '2026-12-07' },
   { id: 'n-07', date: '2026-11-06', category: 'academic', years: [2, 3], title: 'Lab practical exams start on 25 November', body: 'Data Structures Lab (Year 2) is on 25 November and Database Lab (Year 3) is on 26 November. Carry your lab record.', deadline: '2026-11-25' },

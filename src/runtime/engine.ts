@@ -409,13 +409,13 @@ export class AgentRuntime {
     if (problems.length) throw new RuntimeError('bad_args', `${problems.join('; ')}. Nothing was sent.`);
     const request = String(args.request);
 
-    if (b.remoteCalls >= b.limits.maxRemoteCalls) return this.limitHit('maxRemoteCalls', `more than ${b.limits.maxRemoteCalls} calls to other sites in one question.`);
-    const perKey = url;
-    if ((b.perPeer.get(perKey) ?? 0) >= b.limits.maxPerPeer) return this.limitHit('maxPerPeer', `${ctx.labelFor(url)} was already asked ${b.limits.maxPerPeer} time in this question.`);
     if (b.stack.includes(url)) {
       this.trace.emit({ type: 'error', where: 'cycle', message: `${url} is already running further up this chain.` });
       throw new RuntimeError('cycle', `Composition cycle: ${url} is already running in this chain, so it was not called again.`);
     }
+    if (b.remoteCalls >= b.limits.maxRemoteCalls) return this.limitHit('maxRemoteCalls', `more than ${b.limits.maxRemoteCalls} calls to other sites in one question.`);
+    const perKey = url;
+    if ((b.perPeer.get(perKey) ?? 0) >= b.limits.maxPerPeer) return this.limitHit('maxPerPeer', `${ctx.labelFor(url)} was already asked ${b.limits.maxPerPeer} time in this question.`);
     if (depth + 1 > b.limits.maxDepth) return this.limitHit('maxDepth', `calls are nested more than ${b.limits.maxDepth} deep.`);
 
     const peerCtx: PeerContext = {

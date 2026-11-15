@@ -113,6 +113,7 @@ export function timetablePage(v: View): string {
   <label>Section <select name="section" id="view-section">${v.data.department.sections.map((s) => `<option value="${esc(s)}"${s === v.profile.section ? ' selected' : ''}>${esc(s)}</option>`).join('')}</select></label>
   <span class="hint">Changing these only changes this view. Use "Your class" above to change what the agents answer for.</span>
 </form>
+<h2 class="sr-only">This week</h2>
 <div id="week" aria-live="polite">${renderWeek(v, v.profile.year, v.profile.section)}</div>`,
   );
 }
@@ -133,6 +134,7 @@ export function noticesPage(v: View): string {
   </fieldset>
   <label class="check"><input type="checkbox" id="all-years"> Show every year</label>
 </form>
+<h2 class="sr-only">Results</h2>
 <div id="notice-list" aria-live="polite">${renderNoticeList(v)}</div>`,
   );
 }
