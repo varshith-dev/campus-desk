@@ -1,0 +1,33 @@
+{
+  "brand": "Eastbrook Library Desk (sample peer site)",
+  "networks": [
+    {
+      "name": "library_desk",
+      "front_man": "library_desk",
+      "hocon": "./library_desk.network.json",
+      "description": "Library hours, borrowing and fines for the fictional Eastbrook Institute of Technology.",
+      "tags": [
+        "sample-data",
+        "peer-demo"
+      ],
+      "sample_queries": [
+        "Is the library open late during exams?"
+      ]
+    }
+  ],
+  "llm_router": {
+    "base_url": "browser://demo",
+    "mock": true
+  },
+  "allowed_peers": [],
+  "peer_policy": {
+    "mode": "closed",
+    "deny_origins": [],
+    "note": "This demo peer calls no other site."
+  },
+  "deployment": {
+    "mode": "static",
+    "self_contained_runtime": false,
+    "note": "Publishes files only. Other sites run its network in their own browser."
+  }
+}

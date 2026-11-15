@@ -1,0 +1,117 @@
+{
+  "brand": "Campus Desk: EIT CSE",
+  "networks": [
+    {
+      "name": "campus_desk",
+      "front_man": "campus_desk",
+      "hocon": "./campus_desk.network.json",
+      "description": "Timetable, notices, fee dates and exam dates for the Department of Computer Science and Engineering (fictional sample department).",
+      "tags": [
+        "agentified-website",
+        "education",
+        "sample-data"
+      ],
+      "sample_queries": [
+        "What classes do I have today?",
+        "What is my next class?",
+        "Is my Wednesday class on?",
+        "When is the tuition fee due, and what is the late fee?",
+        "When is the Operating Systems exam?",
+        "Any new notices about exams?",
+        "Is the library open late during exams?",
+        "Can you pay my fees for me?"
+      ]
+    }
+  ],
+  "llm_router": {
+    "base_url": "browser://demo",
+    "mock": true,
+    "byok_router": "https://generativelanguage.googleapis.com/v1beta/openai"
+  },
+  "allowed_peers": [
+    "http://localhost:5174"
+  ],
+  "peer_policy": {
+    "mode": "closed",
+    "deny_origins": [],
+    "note": "Calls only the sites in allowed_peers, and only after the visitor agrees on a card."
+  },
+  "agent_mcp": {
+    "protocol": "nsdeploy-agent-mcp/v1",
+    "network": "campus_desk",
+    "front_man": "campus_desk",
+    "available": false,
+    "reason": "This is a static site. A public MCP endpoint needs a server. Other sites run the published network in their own browser instead."
+  },
+  "theme": {
+    "primary": "#1d4ed8"
+  },
+  "linking": {
+    "protocol": "nsdeploy-link/v1",
+    "exports": [
+      {
+        "network": "campus_desk",
+        "front_man": "campus_desk",
+        "aliases": [
+          "campus_desk"
+        ],
+        "url": "campus_desk"
+      }
+    ],
+    "imports": [],
+    "link_updates": {
+      "mode": "browser-local"
+    }
+  },
+  "deployment": {
+    "mode": "static",
+    "self_contained_runtime": true,
+    "browser_mock": true,
+    "direct_byok": true,
+    "direct_mcp_requires_cors": true,
+    "public_mcp_facade": false
+  },
+  "private_context": {
+    "note": "Year, section and fee category are private context (sly_data). They never leave for another site: the front agent names no fields.",
+    "fields": [
+      "student_year",
+      "student_section",
+      "fee_category"
+    ],
+    "to_peers": []
+  },
+  "actions": {
+    "version": 1,
+    "scope": "same-origin",
+    "agentTools": [
+      "website_get_timetable",
+      "website_get_next_class",
+      "website_search_notices",
+      "website_get_fee_dates",
+      "website_get_exam_dates",
+      "website_save_reminder"
+    ],
+    "bindings": {
+      "campus_desk": [
+        "website_save_reminder"
+      ],
+      "timetable_agent": [
+        "website_get_timetable",
+        "website_get_next_class"
+      ],
+      "notices_agent": [
+        "website_search_notices"
+      ],
+      "fees_exams_agent": [
+        "website_get_fee_dates",
+        "website_get_exam_dates"
+      ]
+    },
+    "note": "Site actions run on this origin only and are bound to agents here, so the network file stays plain agent data. Another site that runs this network gets the published snapshot, not these actions."
+  },
+  "runtime": {
+    "file": "./runtime/agentic-runtime.js",
+    "kind": "browser-es-module",
+    "spec_profile": "MVP Profile 0.2"
+  }
+}

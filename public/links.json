@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "networks": {
+    "campus_desk": {
+      "library_desk": "http://localhost:5174/library_desk"
+    }
+  }
+}

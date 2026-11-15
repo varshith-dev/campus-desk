@@ -1,0 +1,28 @@
+import puppeteer from 'puppeteer-core';
+import { startServer } from '../serve.mjs';
+const a = await startServer('/workspace/hackathons/campus-desk/dist', 5173);
+const b = await startServer('/workspace/hackathons/campus-desk/dist-peer', 5174);
+const browser = await puppeteer.launch({ executablePath: '/usr/bin/google-chrome', headless: true, args: ['--no-sandbox'] });
+const page = await browser.newPage();
+const errors = [];
+page.on('pageerror', e => errors.push('pageerror ' + e.message));
+page.on('console', m => { if (['error','warning'].includes(m.type())) errors.push(m.type()+' '+m.text()); });
+await page.setViewport({ width: 1280, height: 900 });
+await page.goto('http://localhost:5173/ask.html', { waitUntil: 'networkidle0' });
+const ask = async (q, handle) => {
+  await page.type('#msg', q);
+  await page.click('#send');
+  if (handle) await handle();
+  await page.waitForFunction(() => !document.querySelector('.msg.bot[aria-busy]'), { timeout: 10000 });
+  const t = await page.$$eval('.msg.bot .text', n => n.at(-1).textContent);
+  console.log('Q:', q, '\nA:', t, '\n');
+};
+await ask('What is my next class?');
+await ask('Is my Wednesday class on?');
+await ask('When is the tuition fee due, and what is the late fee?');
+await ask('Remind me to pay the tuition fee on 27 Nov', async () => { await page.waitForSelector('#confirm[open]'); await page.click('#confirm-yes'); });
+await ask('Is the library open late during exams?', async () => { await page.waitForSelector('#consent[open]'); await page.screenshot({path:'/tmp/consent.png'}); await page.click('#consent-allow'); });
+console.log(await page.$$eval('#activity li', n => n.map(x => x.textContent).join('\n')));
+await page.screenshot({ path: '/tmp/ask.png', fullPage: true });
+console.log('ERRORS', errors);
+await browser.close(); a.close(); b.close();
