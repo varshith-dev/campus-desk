@@ -14,6 +14,7 @@ export async function startStack() {
   const dir = mkdtempSync(join(tmpdir(), 'campus-desk-e2e-'));
   const proc = spawn(join(root, 'node_modules/.bin/next'), ['start', '-p', '5173'], { cwd: root, env: { ...process.env, DATABASE_URL: `file:${dir}/e2e.db`, NODE_ENV: 'production' }, stdio: ['ignore', 'pipe', 'pipe'] });
   let log = '';
+  proc.on('exit', (code, sig) => { if (process.env.E2E_DEBUG || (code ?? 0) !== 0) console.error(`[next start exited: code ${code} signal ${sig}]\n${log.slice(-1500)}`); });
   proc.stdout.on('data', (d) => (log += d));
   proc.stderr.on('data', (d) => (log += d));
   for (let i = 0; i < 60; i++) {
