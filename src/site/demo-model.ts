@@ -134,10 +134,10 @@ const rangeDays = (n: number) => (n === 1 ? '1 day left' : n === 0 ? 'due today'
 /** The scope strings are written for a language model. Say them to the student in the second person. */
 function you(scope: string | undefined): string {
   return (scope ?? '')
-    .replace('the visitor\u2019s saved class', 'your class')
-    .replace('notices for the visitor\u2019s year', 'your year')
-    .replace('the visitor\u2019s year and fee category', 'your year and fee category')
-    .replace('the visitor\u2019s year', 'your year');
+    .replace('the student\u2019s saved class', 'your class')
+    .replace('notices for the student\u2019s year', 'your year')
+    .replace('the student\u2019s year and fee category', 'your year and fee category')
+    .replace('the student\u2019s year', 'your year');
 }
 
 function formatResult(tool: string, content: string, today: string): string {

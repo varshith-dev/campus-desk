@@ -59,3 +59,24 @@ export const twoAgent = (extraFrontTools: NetworkDef['tools'][number]['tools'] =
     { name: 'helper', function: { description: 'helper', parameters: { type: 'object', properties: { request: { type: 'string' } }, required: ['request'] } }, instructions: 'You help.', tools: [] },
   ],
 });
+
+// ---- A real database and the real server code, for tests ----
+import { mkdtempSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { openDb, useDb } from '../lib/db';
+import { createStudent, loadCampusData, type Student } from '../lib/store';
+import { runTool, toolCatalog } from '../lib/tools';
+import { createActions, type ToolCall } from '../src/site/actions';
+import { DEFAULT_PROFILE, type Profile } from '../src/data/model';
+
+/** A fresh seeded database in a temp folder and one guest student. Tools run through `runTool`, the code the routes call. */
+export async function makeDesk(profile: Profile = DEFAULT_PROFILE, clock?: string) {
+  const dir = mkdtempSync(join(tmpdir(), 'campus-desk-'));
+  const db = await openDb(`file:${dir}/test.db`);
+  useDb(Promise.resolve(db));
+  const student: Student = await createStudent(db, { kind: 'guest', profile });
+  const data = await loadCampusData(db, 0);
+  const call: ToolCall = async (name, args, o) => (await runTool(name, args, { db, student, write: o.confirmed ? 'confirmed' : 'propose', source: 'test', clock })).result;
+  const actions = createActions(toolCatalog(data.department), call);
+  return { db, dir, student, data, call, actions, catalog: toolCatalog(data.department) };
+}

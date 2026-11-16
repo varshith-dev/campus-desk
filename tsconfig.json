@@ -4,13 +4,21 @@
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
     "skipLibCheck": true,
     "noEmit": true,
+    "incremental": true,
+    "allowJs": false,
+    "isolatedModules": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "plugins": [{ "name": "next" }],
     "types": ["node"],
-    "paths": { "@aw/runtime": ["./src/runtime/index.ts"] }
+    "paths": { "@aw/runtime": ["./src/runtime/index.ts"], "@/*": ["./*"] }
   },
-  "include": ["src", "tests", "scripts/**/*.ts", "network", "tools"]
+  "include": ["next-env.d.ts", ".next/types/**/*.ts", ".next/dev/types/**/*.ts", "app", "components", "lib", "hooks", "src", "tests", "scripts/**/*.ts", "network", "tools", "proxy.ts", "next.config.ts"],
+  "exclude": ["node_modules"]
 }

@@ -4,9 +4,9 @@ import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { extname, join, relative } from 'node:path';
 
 const root = join(import.meta.dirname, '..');
-const SKIP_DIRS = new Set(['node_modules', '.git', 'dist', 'dist-peer', 'agent-tools']);
+const SKIP_DIRS = new Set(['node_modules', '.git', 'dist', 'dist-peer', 'agent-tools', '.next']);
 const SKIP_FILES = new Set(['package-lock.json']);
-const BINARY = new Set(['.png', '.jpg', '.jpeg', '.gif', '.pdf', '.ico', '.webp', '.woff', '.woff2']);
+const BINARY = new Set(['.png', '.jpg', '.jpeg', '.gif', '.pdf', '.ico', '.webp', '.woff', '.woff2', '.db', '.mp4', '.woff2']);
 const EM_DASH = String.fromCharCode(0x2014);
 
 // Words that must never appear in this project. Stored reversed so this file does not contain them.

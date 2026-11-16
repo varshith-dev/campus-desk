@@ -1,5 +1,12 @@
 node_modules/
 dist/
 dist-peer/
+.next/
+next-env.d.ts
+public/runtime/
+data/*.db
+data/*.db-*
 *.log
 .DS_Store
+.env*.local
+tsconfig.tsbuildinfo

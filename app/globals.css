@@ -1,0 +1,152 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import '@fontsource-variable/fraunces/full.css';
+@import '@fontsource-variable/hanken-grotesk/index.css';
+@import '@fontsource/ibm-plex-mono/400.css';
+@import '@fontsource/ibm-plex-mono/500.css';
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+  Eastbrook identity: department office paper, brick, chalkboard green and a pencil blue.
+  Type: Fraunces for headings, Hanken Grotesk for text, IBM Plex Mono for times, rooms and receipts.
+*/
+:root {
+  --radius: 0.5rem;
+  --background: #f4efe4;
+  --foreground: #1d2a2c;
+  --card: #fbf8f0;
+  --card-foreground: #1d2a2c;
+  --popover: #fbf8f0;
+  --popover-foreground: #1d2a2c;
+  --primary: #a23b28;
+  --primary-foreground: #fff8ee;
+  --secondary: #e9e1cf;
+  --secondary-foreground: #1d2a2c;
+  --muted: #ece5d4;
+  --muted-foreground: #5b6560;
+  --accent: #e5ad32;
+  --accent-foreground: #261d05;
+  --destructive: #b3261e;
+  --border: #d8cfba;
+  --input: #cbc1a9;
+  --ring: #2f6f8f;
+  --chalk: #16302a;
+  --chalk-foreground: #eaf0e2;
+  --pencil: #2f6f8f;
+  --brick: #a23b28;
+  --mustard: #e5ad32;
+  --sage: #5d7a5a;
+  --paper-line: rgba(29, 42, 44, 0.07);
+}
+
+.dark {
+  --background: #121b19;
+  --foreground: #ece8da;
+  --card: #1a2623;
+  --card-foreground: #ece8da;
+  --popover: #1a2623;
+  --popover-foreground: #ece8da;
+  --primary: #e06c52;
+  --primary-foreground: #1d0d08;
+  --secondary: #243430;
+  --secondary-foreground: #ece8da;
+  --muted: #213029;
+  --muted-foreground: #a3b0a6;
+  --accent: #e5ad32;
+  --accent-foreground: #261d05;
+  --destructive: #f07167;
+  --border: #31423c;
+  --input: #3b4e47;
+  --ring: #6bb2d1;
+  --chalk: #0c1614;
+  --chalk-foreground: #eaf0e2;
+  --pencil: #6bb2d1;
+  --brick: #e06c52;
+  --mustard: #e5ad32;
+  --sage: #8fb08a;
+  --paper-line: rgba(236, 232, 218, 0.06);
+}
+
+@theme inline {
+  --font-sans: 'Hanken Grotesk Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Fraunces Variable', ui-serif, Georgia, serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chalk: var(--chalk);
+  --color-chalk-foreground: var(--chalk-foreground);
+  --color-pencil: var(--pencil);
+  --color-brick: var(--brick);
+  --color-mustard: var(--mustard);
+  --color-sage: var(--sage);
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
+  --radius-xl: calc(var(--radius) + 6px);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-background font-sans text-foreground antialiased;
+    background-image: repeating-linear-gradient(0deg, transparent 0, transparent 31px, var(--paper-line) 31px, var(--paper-line) 32px);
+    font-feature-settings: 'ss01', 'kern';
+  }
+  h1, h2, h3 {
+    @apply font-display tracking-tight;
+    font-variation-settings: 'opsz' 96, 'SOFT' 30;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-ring;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  }
+}
+
+@layer components {
+  .mono { @apply font-mono tabular-nums; }
+  .eyebrow { @apply font-mono text-[0.72rem] font-medium uppercase tracking-[0.14em] text-muted-foreground; }
+  /* A stamped label, like the ones on a department form. */
+  .stamp { @apply inline-flex items-center gap-1.5 rounded-sm border-2 border-current px-2 py-0.5 font-mono text-[0.7rem] font-medium uppercase tracking-widest; transform: rotate(-1.5deg); }
+  /* Card with a punched edge, used for fee tickets and receipts. */
+  .ticket {
+    @apply relative bg-card;
+    mask-image: radial-gradient(circle 9px at 0 50%, #0000 98%, #000) , radial-gradient(circle 9px at 100% 50%, #0000 98%, #000);
+    mask-composite: intersect;
+    -webkit-mask-composite: source-in;
+  }
+  .tape {
+    background-color: var(--card);
+    background-image: linear-gradient(135deg, transparent 75%, var(--card) 75%), linear-gradient(225deg, transparent 75%, var(--card) 75%);
+  }
+  .chalk-panel {
+    @apply bg-chalk text-chalk-foreground;
+    background-image: radial-gradient(circle at 20% 0%, rgba(255,255,255,0.06), transparent 55%), repeating-linear-gradient(0deg, transparent 0, transparent 39px, rgba(255,255,255,0.04) 39px, rgba(255,255,255,0.04) 40px);
+  }
+  .skip { @apply sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-[100] focus:rounded-md focus:bg-foreground focus:px-3 focus:py-2 focus:text-background; }
+}

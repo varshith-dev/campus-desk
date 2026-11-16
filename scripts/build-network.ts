@@ -7,7 +7,7 @@ import { LIB_NETWORK, buildLibraryManifest, buildLibraryNetwork } from '../netwo
 import type { CampusData } from '../src/data/model';
 
 const root = join(import.meta.dirname, '..');
-const dataDir = join(root, 'public', 'data');
+const dataDir = join(root, 'data', 'seed');
 const read = (f: string) => JSON.parse(readFileSync(join(dataDir, f), 'utf8'));
 const data: CampusData = {
   department: read('department.json'),

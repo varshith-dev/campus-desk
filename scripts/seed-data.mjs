@@ -1,9 +1,9 @@
-// Writes the fictional sample data for Eastbrook Institute of Technology into public/data/.
+// Writes the fictional sample data for Eastbrook Institute of Technology into data/seed/.
 // Everything here is made up. Run: npm run seed
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-const out = join(import.meta.dirname, '..', 'public', 'data');
+const out = join(import.meta.dirname, '..', 'data', 'seed');
 mkdirSync(out, { recursive: true });
 const write = (name, value) => writeFileSync(join(out, name), JSON.stringify(value, null, 2) + '\n');
 
@@ -129,4 +129,4 @@ write('exams.json', {
     { year: 3, course: 'HS301', type: 'End-semester', date: '2026-12-23', start: '14:00', end: '17:00', venue: 'Exam Hall B' },
   ],
 });
-console.log('Sample data written to public/data/');
+console.log('Sample data written to data/seed/');

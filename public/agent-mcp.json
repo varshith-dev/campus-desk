@@ -3,5 +3,5 @@
   "network": "campus_desk",
   "front_man": "campus_desk",
   "available": false,
-  "reason": "This is a static site. A public MCP endpoint needs a server. Other sites run the published network in their own browser instead."
+  "reason": "The agent network runs in the caller’s browser, so there is no hosted front-agent endpoint. The live site actions are offered over MCP at /api/mcp (see actions.remote) to agents the student has approved."
 }

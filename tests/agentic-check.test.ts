@@ -9,7 +9,7 @@ const made: string[] = [];
 function copy(): string {
   const dir = mkdtempSync(join(tmpdir(), 'ac-'));
   made.push(dir);
-  cpSync(join(root, 'dist'), dir, { recursive: true });
+  cpSync(join(root, 'public'), dir, { recursive: true });
   return dir;
 }
 const edit = (dir: string, file: string, fn: (j: any) => void) => {
@@ -22,13 +22,13 @@ afterEach(() => { for (const d of made.splice(0)) rmSync(d, { recursive: true, f
 
 describe('agentic-check on the built site', () => {
   it('passes the published files with no failures and no warnings', async () => {
-    const rep = await checkSite(folderSource(join(root, 'dist')));
+    const rep = await checkSite(folderSource(join(root, 'public')));
     expect(rep.ok).toBe(true);
     expect(rep.counts).toMatchObject({ fail: 0, warn: 0 });
     expect(rep.results.length).toBeGreaterThanOrEqual(14);
   });
   it('prints a readable report', async () => {
-    const text = formatReport(await checkSite(folderSource(join(root, 'dist'))));
+    const text = formatReport(await checkSite(folderSource(join(root, 'public'))));
     expect(text).toMatch(/PASS {2}\[spec 2\.1, 3\.1\] network "campus_desk": valid data-only network/);
     expect(text).toMatch(/look like a conforming open agentic website/);
   });

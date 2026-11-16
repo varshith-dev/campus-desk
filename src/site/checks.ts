@@ -1,13 +1,18 @@
-// The checks shown on the "For agents" page. They use the runtime's own validators.
-import { validateManifest, validateNetwork } from '@aw/runtime';
-import type { Manifest, NetworkDef } from '@aw/runtime';
+// The checks shown on the "For agents" page. They use the published runtime's own validators, passed in by the page.
+import type { Manifest, NetworkDef, Validation } from '@aw/runtime';
+
+export interface Validators {
+  validateManifest(m: unknown): Validation;
+  validateNetwork(n: unknown, frontMan?: string): Validation;
+}
 
 export interface Check {
   status: 'pass' | 'fail' | 'warn';
   text: string;
 }
 
-export function runChecks(manifest: unknown, network: unknown, runtimeReachable: boolean): Check[] {
+export function runChecks(v: Validators, manifest: unknown, network: unknown, runtimeReachable: boolean): Check[] {
+  const { validateManifest, validateNetwork } = v;
   const out: Check[] = [];
   const mv = validateManifest(manifest);
   out.push({ status: mv.ok ? 'pass' : 'fail', text: mv.ok ? 'agent-manifest.json is valid and lists a network with name, front_man and hocon.' : `agent-manifest.json problems: ${mv.errors.join('; ')}` });

@@ -1,0 +1,23 @@
+# Firebase App Hosting (runs the Next.js server routes). Deploy with: firebase apphosting:backends:create
+# Secrets are created with: firebase apphosting:secrets:set <NAME>
+runConfig:
+  cpu: 1
+  memoryMiB: 512
+  minInstances: 0
+  maxInstances: 2
+  concurrency: 80
+
+env:
+  - variable: DATABASE_URL
+    secret: campus-desk-database-url
+  - variable: DATABASE_AUTH_TOKEN
+    secret: campus-desk-database-token
+  - variable: SIGNING_KEY_PEM
+    secret: campus-desk-signing-key
+  - variable: PEER_LIBRARY_URL
+    value: https://REPLACE-WITH-YOUR-LIBRARY-SITE/library_desk
+    availability: [BUILD]
+  - variable: NEXT_PUBLIC_PEER_URL
+    value: https://REPLACE-WITH-YOUR-LIBRARY-SITE
+  - variable: SEED_DEMO_ACCOUNT
+    value: "1"

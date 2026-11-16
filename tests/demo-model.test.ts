@@ -1,27 +1,23 @@
 import { describe, expect, it } from 'vitest';
 import { AgentRuntime, Trace } from '@aw/runtime';
 import type { Manifest, NetworkDef } from '@aw/runtime';
-import { createActions, slyFromProfile } from '../src/site/actions';
+import { listReminders } from '../lib/store';
 import { DemoModel, extractDate, extractDays, tokens } from '../src/site/demo-model';
-import { ReminderStore } from '../src/site/reminders';
 import { DEFAULT_PROFILE } from '../src/data/model';
 import type { Profile } from '../src/data/model';
-import { fakeFetch, loadSample, readJson, twoAgent } from './helpers';
+import { fakeFetch, loadSample, makeDesk, readJson, twoAgent } from './helpers';
 
 const data = loadSample();
 const manifest = readJson('public/agent-manifest.json') as Manifest;
 const network = readJson('public/campus_desk.network.json') as NetworkDef;
 const libManifest = readJson('peer/library-desk/agent-manifest.json') as Manifest;
 const libNetwork = readJson('peer/library-desk/library_desk.network.json') as NetworkDef;
-const mem = () => {
-  const m = new Map<string, string>();
-  return { getItem: (k: string) => m.get(k) ?? null, setItem: (k: string, v: string) => void m.set(k, v) };
-};
 
 async function ask(q: string, opts: { profile?: Profile; confirm?: boolean; now?: string } = {}) {
   const trace = new Trace();
-  const store = new ReminderStore(mem());
   const now = opts.now ?? data.department.sample_now;
+  const desk = await makeDesk(opts.profile ?? DEFAULT_PROFILE, now);
+  const profile = opts.profile ?? DEFAULT_PROFILE;
   const rt = new AgentRuntime({
     manifest,
     siteOrigin: 'http://localhost:5173',
@@ -29,16 +25,17 @@ async function ask(q: string, opts: { profile?: Profile; confirm?: boolean; now?
     networkName: 'campus_desk',
     frontMan: 'campus_desk',
     llm: new DemoModel({ today: now.slice(0, 10), office: 'Block C, Room 104' }),
-    actions: createActions({ data, today: now.slice(0, 10), now, reminders: store }),
+    actions: desk.actions,
     actionBindings: manifest.actions!.bindings,
-    sly: slyFromProfile(opts.profile ?? DEFAULT_PROFILE),
+    sly: { student_year: profile.year, student_section: profile.section, fee_category: profile.feeCategory },
     consent: async () => 'allow',
     confirm: async () => opts.confirm ?? true,
     fetchImpl: fakeFetch({ 'http://localhost:5174/agent-manifest.json': libManifest, 'http://localhost:5174/library_desk.network.json': libNetwork }).impl,
     trace,
   });
   const res = await rt.run(q);
-  return { text: res.text, trace, store, tools: trace.events.filter((e) => e.type === 'tool_call').map((e: any) => e.tool as string) };
+  const reminders = () => listReminders(desk.db, desk.student.id, 'saved');
+  return { text: res.text, trace, reminders, tools: trace.events.filter((e) => e.type === 'tool_call').map((e: any) => e.tool as string) };
 }
 
 describe('demo model: parsing helpers', () => {
@@ -106,10 +103,10 @@ describe('demo model through the real runtime', () => {
   });
   it('saves a reminder only after the visitor confirms', async () => {
     const yes = await ask('Remind me to pay the tuition fee on 27 Nov');
-    expect(yes.store.list()).toEqual([expect.objectContaining({ title: 'Pay the tuition fee', date: '2026-11-27' })]);
+    expect(await yes.reminders()).toEqual([expect.objectContaining({ title: 'Pay the tuition fee', date: '2026-11-27' })]);
     expect(yes.text).toMatch(/Saved: "Pay the tuition fee" on 2026-11-27/);
     const no = await ask('Remind me to pay the tuition fee on 27 Nov', { confirm: false });
-    expect(no.store.list()).toEqual([]);
+    expect(await no.reminders()).toEqual([]);
     expect(no.text).toMatch(/I did not save anything/);
   });
   it('asks for the date when a reminder has none', async () => {
@@ -131,7 +128,7 @@ describe('demo model through the real runtime', () => {
     const seen: string[] = [];
     const demo = new DemoModel({ today: '2026-11-16', office: 'x' });
     const spy = { label: demo.label, router: demo.router, kind: demo.kind, chat: async (req: Parameters<DemoModel['chat']>[0]) => (seen.push(JSON.stringify(req.messages.filter((m) => m.role !== 'tool'))), demo.chat(req)) };
-    const rt = new AgentRuntime({ manifest, siteOrigin: 'http://localhost:5173', network, networkName: 'campus_desk', frontMan: 'campus_desk', llm: spy as never, actions: createActions({ data, today: '2026-11-16', now: data.department.sample_now, reminders: new ReminderStore(mem()) }), actionBindings: manifest.actions!.bindings, sly: { student_year: 3, student_section: 'B', fee_category: 'sponsored' }, consent: async () => 'allow', confirm: async () => true, trace });
+    const rt = new AgentRuntime({ manifest, siteOrigin: 'http://localhost:5173', network, networkName: 'campus_desk', frontMan: 'campus_desk', llm: spy as never, actions: (await makeDesk({ year: 3, section: 'B', feeCategory: 'sponsored' })).actions, actionBindings: manifest.actions!.bindings, sly: { student_year: 3, student_section: 'B', fee_category: 'sponsored' }, consent: async () => 'allow', confirm: async () => true, trace });
     await rt.run('What classes do I have today?');
     const all = seen.join('\n');
     expect(all).not.toMatch(/sponsored|student_section|"B"/);

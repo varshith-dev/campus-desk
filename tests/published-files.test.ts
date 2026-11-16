@@ -4,8 +4,8 @@ import { describe, expect, it } from 'vitest';
 import { ACTION_BINDINGS, ACTION_NAMES, buildCampusNetwork, buildManifest, examFacts, feeFacts, noticeFacts, timetableFacts } from '../network/campus-desk';
 import { buildLibraryManifest, buildLibraryNetwork } from '../network/library-desk';
 import { runChecks } from '../src/site/checks';
-import { createActions } from '../src/site/actions';
-import { ReminderStore } from '../src/site/reminders';
+import { toolCatalog } from '../src/site/catalog';
+import * as runtime from '@aw/runtime';
 import { WEEKDAYS } from '../src/data/model';
 import { loadSample, readJson, root } from './helpers';
 
@@ -41,7 +41,7 @@ describe('published files match the data and the builder', () => {
   });
 
   it('the bindings name real actions, and every action is bound once', () => {
-    const real = createActions({ data, today: data.department.sample_today, now: data.department.sample_now, reminders: new ReminderStore({ getItem: () => null, setItem: () => undefined }) }).map((a) => `website_${a.name}`);
+    const real = toolCatalog(data.department).map((a) => `website_${a.name}`);
     const bound = Object.values(ACTION_BINDINGS).flat();
     expect([...bound].sort()).toEqual([...real].sort());
     expect(ACTION_NAMES.map((n) => `website_${n}`).sort()).toEqual([...real].sort());
@@ -86,7 +86,7 @@ describe('the published snapshot carries the same facts as the data', () => {
 
 describe('the "For agents" page checks', () => {
   it('pass for the published files', () => {
-    const checks = runChecks(manifest, network, true);
+    const checks = runChecks(runtime, manifest, network, true);
     expect(checks.filter((c) => c.status === 'fail')).toEqual([]);
     expect(checks.some((c) => /Private context is deny by default/.test(c.text))).toBe(true);
     expect(checks.some((c) => /allowed_peers/.test(c.text))).toBe(true);
@@ -94,14 +94,14 @@ describe('the "For agents" page checks', () => {
   it('fail when a peer is not listed', () => {
     const m = structuredClone(manifest);
     m.allowed_peers = [];
-    expect(runChecks(m, network, true).some((c) => c.status === 'fail' && /not in allowed_peers/.test(c.text))).toBe(true);
+    expect(runChecks(runtime, m, network, true).some((c) => c.status === 'fail' && /not in allowed_peers/.test(c.text))).toBe(true);
   });
   it('fail for a broken network', () => {
     const n = structuredClone(network);
     n.tools[1].tools = ['campus_desk'];
-    expect(runChecks(manifest, n, true).some((c) => c.status === 'fail' && /cycle/.test(c.text))).toBe(true);
+    expect(runChecks(runtime, manifest, n, true).some((c) => c.status === 'fail' && /cycle/.test(c.text))).toBe(true);
   });
-  it('fail when the runtime file is missing', () => expect(runChecks(manifest, network, false).some((c) => c.status === 'fail' && /runtime file/.test(c.text))).toBe(true));
+  it('fail when the runtime file is missing', () => expect(runChecks(runtime, manifest, network, false).some((c) => c.status === 'fail' && /runtime file/.test(c.text))).toBe(true));
 });
 
 describe('project hygiene', () => {

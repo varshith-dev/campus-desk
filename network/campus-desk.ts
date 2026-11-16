@@ -3,6 +3,7 @@
 import type { AgentDef, Manifest, NetworkDef } from '../src/runtime/types';
 import { WEEKDAYS, WEEKDAY_NAMES, formatDate, money, classesOn } from '../src/data/model';
 import type { CampusData } from '../src/data/model';
+import { toolCatalog } from '../src/site/catalog';
 
 export const NETWORK_NAME = 'campus_desk';
 export const FRONT_MAN = 'campus_desk';
@@ -240,7 +241,7 @@ export function buildManifest(data: CampusData, opts: BuildOptions = {}): Manife
       network: NETWORK_NAME,
       front_man: FRONT_MAN,
       available: false,
-      reason: 'This is a static site. A public MCP endpoint needs a server. Other sites run the published network in their own browser instead.',
+      reason: 'The agent network runs in the caller\u2019s browser, so there is no hosted front-agent endpoint. The live site actions are offered over MCP at /api/mcp (see actions.remote) to agents the student has approved.',
     },
     theme: { primary: '#1d4ed8' },
     linking: {
@@ -250,7 +251,7 @@ export function buildManifest(data: CampusData, opts: BuildOptions = {}): Manife
       link_updates: { mode: 'browser-local' },
     },
     deployment: {
-      mode: 'static',
+      mode: 'server',
       self_contained_runtime: true,
       browser_mock: true,
       direct_byok: true,
@@ -267,7 +268,17 @@ export function buildManifest(data: CampusData, opts: BuildOptions = {}): Manife
       scope: 'same-origin',
       agentTools: ACTION_NAMES.map((n) => `website_${n}`),
       bindings: ACTION_BINDINGS,
-      note: 'Site actions run on this origin only and are bound to agents here, so the network file stays plain agent data. Another site that runs this network gets the published snapshot, not these actions.',
+      catalog: toolCatalog(data.department).map((t) => ({ name: t.name, purpose: t.purpose, effect: t.effect, scope: t.scope, reads_private_fields: t.reads, input_schema: t.schema })),
+      remote: {
+        note: 'Optional extension beyond the minimum profile. An outside agent can ask a student for a grant and then call the live site actions. Every call is checked and written to the student\u2019s signed ledger.',
+        access_requests: '/api/agent/requests',
+        tools: '/api/agent/tools',
+        mcp: '/api/mcp',
+        public_keys: '/.well-known/campus-desk-keys.json',
+        receipt_verify: '/api/receipts/verify',
+        auth: 'bearer grant token, signed Ed25519, scoped, expiring, bound to the caller origin',
+      },
+      note: 'Site actions run on this origin and are bound to agents here, so the network file stays plain agent data. A site that runs this network in its own browser gets the published snapshot, or it can ask the student for a grant to call the live actions.',
     },
     runtime: {
       file: './runtime/agentic-runtime.js',

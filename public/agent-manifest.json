@@ -41,7 +41,7 @@
     "network": "campus_desk",
     "front_man": "campus_desk",
     "available": false,
-    "reason": "This is a static site. A public MCP endpoint needs a server. Other sites run the published network in their own browser instead."
+    "reason": "The agent network runs in the caller’s browser, so there is no hosted front-agent endpoint. The live site actions are offered over MCP at /api/mcp (see actions.remote) to agents the student has approved."
   },
   "theme": {
     "primary": "#1d4ed8"
@@ -64,7 +64,7 @@
     }
   },
   "deployment": {
-    "mode": "static",
+    "mode": "server",
     "self_contained_runtime": true,
     "browser_mock": true,
     "direct_byok": true,
@@ -107,7 +107,181 @@
         "website_get_exam_dates"
       ]
     },
-    "note": "Site actions run on this origin only and are bound to agents here, so the network file stays plain agent data. Another site that runs this network gets the published snapshot, not these actions."
+    "catalog": [
+      {
+        "name": "get_timetable",
+        "purpose": "Read the class timetable for one day, including cancelled or moved classes. Uses the student's saved class unless a year and section are given.",
+        "effect": "read",
+        "scope": "timetable:read",
+        "reads_private_fields": [
+          "student_year",
+          "student_section"
+        ],
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "day": {
+              "type": "string",
+              "description": "today, tomorrow, a weekday name such as Friday, or a date like 2026-11-18. Default is today."
+            },
+            "year": {
+              "type": "integer",
+              "enum": [
+                2,
+                3
+              ],
+              "description": "Only when asking about another year."
+            },
+            "section": {
+              "type": "string",
+              "enum": [
+                "A",
+                "B"
+              ],
+              "description": "Only when asking about another section."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_next_class",
+        "purpose": "Find the student's next class after the site clock, skipping cancelled ones.",
+        "effect": "read",
+        "scope": "timetable:read",
+        "reads_private_fields": [
+          "student_year",
+          "student_section"
+        ],
+        "input_schema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "search_notices",
+        "purpose": "Search the department notices, newest first, for the student's year.",
+        "effect": "read",
+        "scope": "notices:read",
+        "reads_private_fields": [
+          "student_year"
+        ],
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "maxLength": 120,
+              "description": "Words to look for. Leave empty for the latest notices."
+            },
+            "category": {
+              "type": "string",
+              "enum": [
+                "exams",
+                "fees",
+                "academic",
+                "events",
+                "placement",
+                "admin"
+              ]
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 10
+            }
+          }
+        }
+      },
+      {
+        "name": "get_fee_dates",
+        "purpose": "Read fee due dates, amounts for the student's fee category, and late fees.",
+        "effect": "read",
+        "scope": "fees:read",
+        "reads_private_fields": [
+          "student_year",
+          "fee_category"
+        ],
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "item": {
+              "type": "string",
+              "maxLength": 60,
+              "description": "Part of a fee name, such as exam or tuition."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_exam_dates",
+        "purpose": "Read exam dates, times and venues for the student's year.",
+        "effect": "read",
+        "scope": "exams:read",
+        "reads_private_fields": [
+          "student_year"
+        ],
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "course": {
+              "type": "string",
+              "maxLength": 60,
+              "description": "A course code such as CS201 or part of a course name."
+            },
+            "type": {
+              "type": "string",
+              "maxLength": 30,
+              "description": "Lab practical or End-semester."
+            }
+          }
+        }
+      },
+      {
+        "name": "save_reminder",
+        "purpose": "Save a reminder for the student. The student must confirm it first.",
+        "effect": "write",
+        "scope": "reminders:propose",
+        "reads_private_fields": [],
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 80
+            },
+            "date": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+              "description": "A date such as 2026-11-30."
+            },
+            "time": {
+              "type": "string",
+              "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$",
+              "description": "24 hour time such as 09:00."
+            },
+            "note": {
+              "type": "string",
+              "maxLength": 200
+            }
+          },
+          "required": [
+            "title",
+            "date"
+          ]
+        }
+      }
+    ],
+    "remote": {
+      "note": "Optional extension beyond the minimum profile. An outside agent can ask a student for a grant and then call the live site actions. Every call is checked and written to the student’s signed ledger.",
+      "access_requests": "/api/agent/requests",
+      "tools": "/api/agent/tools",
+      "mcp": "/api/mcp",
+      "public_keys": "/.well-known/campus-desk-keys.json",
+      "receipt_verify": "/api/receipts/verify",
+      "auth": "bearer grant token, signed Ed25519, scoped, expiring, bound to the caller origin"
+    },
+    "note": "Site actions run on this origin and are bound to agents here, so the network file stays plain agent data. A site that runs this network in its own browser gets the published snapshot, or it can ask the student for a grant to call the live actions."
   },
   "runtime": {
     "file": "./runtime/agentic-runtime.js",

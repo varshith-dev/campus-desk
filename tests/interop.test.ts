@@ -2,11 +2,9 @@
 import { describe, expect, it } from 'vitest';
 import { AgentRuntime, OpenAICompatClient, Trace, validateManifest, validateNetwork } from '@aw/runtime';
 import type { Manifest, NetworkDef } from '@aw/runtime';
-import { createActions, slyFromProfile } from '../src/site/actions';
 import { DemoModel } from '../src/site/demo-model';
-import { ReminderStore } from '../src/site/reminders';
 import { DEFAULT_PROFILE } from '../src/data/model';
-import { fakeFetch, loadSample, readJson, say, ScriptedLlm, tc, callTools } from './helpers';
+import { fakeFetch, loadSample, makeDesk, readJson, say, ScriptedLlm, tc, callTools } from './helpers';
 
 const PEER = 'http://localhost:5174';
 const SITE = 'http://localhost:5173';
@@ -15,17 +13,13 @@ const network = readJson('public/campus_desk.network.json') as NetworkDef;
 const libManifest = readJson('peer/library-desk/agent-manifest.json') as Manifest;
 const libNetwork = readJson('peer/library-desk/library_desk.network.json') as NetworkDef;
 const data = loadSample();
-const memory = () => {
-  const m = new Map<string, string>();
-  return { getItem: (k: string) => m.get(k) ?? null, setItem: (k: string, v: string) => void m.set(k, v) };
-};
 
 const peerFiles = { [`${PEER}/agent-manifest.json`]: libManifest, [`${PEER}/library_desk.network.json`]: libNetwork };
 
-function build(over: Partial<ConstructorParameters<typeof AgentRuntime>[0]> = {}) {
+async function build(over: Partial<ConstructorParameters<typeof AgentRuntime>[0]> = {}) {
   const trace = new Trace();
   const f = fakeFetch(peerFiles);
-  const actions = createActions({ data, today: data.department.sample_today, now: data.department.sample_now, reminders: new ReminderStore(memory()) });
+  const { actions } = await makeDesk();
   const rt = new AgentRuntime({
     manifest,
     siteOrigin: SITE,
@@ -35,7 +29,7 @@ function build(over: Partial<ConstructorParameters<typeof AgentRuntime>[0]> = {}
     llm: new DemoModel({ today: data.department.sample_today, office: 'Block C' }),
     actions,
     actionBindings: manifest.actions!.bindings,
-    sly: slyFromProfile(DEFAULT_PROFILE),
+    sly: { student_year: 2, student_section: 'A', fee_category: 'general' },
     consent: async () => 'allow',
     confirm: async () => true,
     fetchImpl: f.impl,
@@ -61,7 +55,7 @@ describe('MVP section 6, check 1: publish a two-agent network and a manifest', (
 
 describe('MVP section 6, checks 2 and 3: run in the browser with the default router, call an agent and a grounded capability', () => {
   it('answers a question through a specialist and a site action using the published default router', async () => {
-    const { rt, trace } = build();
+    const { rt, trace } = await build();
     const res = await rt.run('What is my next class?');
     expect(res.text).toMatch(/Your next class is MA201/);
     const calls = trace.events.filter((e) => e.type === 'tool_call').map((e: any) => e.tool);
@@ -78,7 +72,7 @@ describe('MVP section 6, checks 2 and 3: run in the browser with the default rou
     }) as unknown as typeof fetch;
     const llm = new OpenAICompatClient({ baseUrl: 'https://router.example/v1', model: 'm1', apiKey: 'KEY-123456', kind: 'byok', fetchImpl: routerFetch });
     const streamed: string[] = [];
-    const { rt } = build({ llm, onText: (d) => streamed.push(d) });
+    const { rt } = await build({ llm, onText: (d) => streamed.push(d) });
     const res = await rt.run('hi');
     expect(res.text).toBe('Hello student');
     expect(streamed.join('')).toBe('Hello student');
@@ -91,7 +85,7 @@ describe('MVP section 6, checks 2 and 3: run in the browser with the default rou
 describe('MVP section 6, checks 4 and 5: load a named network from a second origin after approval, and keep the key away from it', () => {
   it('asks first, then runs the exact named peer network in this browser', async () => {
     const asked: string[] = [];
-    const { rt, trace } = build({ consent: async (r) => (asked.push(r.origin), 'allow') });
+    const { rt, trace } = await build({ consent: async (r) => (asked.push(r.origin), 'allow') });
     const res = await rt.run('Is the library open late during exams?');
     expect(asked).toEqual([PEER]);
     expect(res.text).toMatch(/open until 22:00/);
@@ -108,7 +102,7 @@ describe('MVP section 6, checks 4 and 5: load a named network from a second orig
       return new Response(`data: ${JSON.stringify({ choices: [{ delta }] })}\n\ndata: [DONE]\n\n`, { headers: { 'content-type': 'text/event-stream' } });
     }) as unknown as typeof fetch;
     const llm = new OpenAICompatClient({ baseUrl: 'https://router.example/v1', model: 'm1', apiKey: 'KEY-SECRET-999', kind: 'byok', fetchImpl: routerFetch });
-    const { rt, f } = build({ llm });
+    const { rt, f } = await build({ llm });
     await rt.run('library?');
     // Every model call, including the peer's agents, went to the visitor's router with the visitor's key.
     expect(llmCalls.length).toBeGreaterThanOrEqual(3);
@@ -150,7 +144,7 @@ describe('MVP section 6, check 6: private context is absent at the peer unless a
 
 describe('MVP section 6, check 7: stop an invalid network, a cycle, an over-budget request and a denied origin, visibly', () => {
   it('a denied origin: nothing is fetched and the visitor sees why', async () => {
-    const { rt, trace, f } = build({ consent: async () => 'deny' });
+    const { rt, trace, f } = await build({ consent: async () => 'deny' });
     const res = await rt.run('Is the library open late during exams?');
     expect(f.log).toHaveLength(0);
     expect(res.text).toMatch(/did not allow contact with http:\/\/localhost:5174/);

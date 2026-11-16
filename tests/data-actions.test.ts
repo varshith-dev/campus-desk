@@ -1,17 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { addDays, classesOn, examDates, feeDates, formatDate, nextClass, resolveDate, searchNotices, weekdayOf } from '../src/data/model';
-import { createActions, profileFromSly, slyFromProfile } from '../src/site/actions';
-import { ReminderStore, toIcs } from '../src/site/reminders';
-import { ProfileState, siteClock } from '../src/site/state';
+import { toIcs } from '../lib/ics';
+import { decideReminder, listReminders } from '../lib/store';
+import { runTool, siteClock } from '../lib/tools';
 import { checkSchema } from '@aw/runtime';
-import { loadSample } from './helpers';
+import { loadSample, makeDesk } from './helpers';
 
 const data = loadSample();
 const today = data.department.sample_today;
-const memory = () => {
-  const m = new Map<string, string>();
-  return { getItem: (k: string) => m.get(k) ?? null, setItem: (k: string, v: string) => void m.set(k, v) };
-};
 
 describe('dates', () => {
   it('the sample day is a Monday', () => expect(weekdayOf(today)).toBe('Mon'));
@@ -84,55 +80,83 @@ describe('notices, fees and exams', () => {
   it('does not show another year exams', () => expect(examDates(data, 2, today).some((e) => e.course === 'CS301')).toBe(false));
 });
 
-describe('site actions', () => {
-  const store = new ReminderStore(memory());
-  const actions = createActions({ data, today, now: data.department.sample_now, reminders: store });
-  const by = (n: string) => actions.find((a) => a.name === n)!;
-  const sly = slyFromProfile({ year: 2, section: 'A', feeCategory: 'scholarship' });
-  const ctx = { sly, origin: 'https://site.example' };
-
-  it('has six actions, five read-only and one write', () => {
+describe('site actions (server code, real database)', () => {
+  it('has six actions, five read-only and one write', async () => {
+    const { actions } = await makeDesk();
     expect(actions.map((a) => a.name)).toEqual(['get_timetable', 'get_next_class', 'search_notices', 'get_fee_dates', 'get_exam_dates', 'save_reminder']);
     expect(actions.filter((a) => a.effect === 'write').map((a) => a.name)).toEqual(['save_reminder']);
   });
-  it('reads the saved class from private context when no year or section is given', async () => {
-    const r: any = await by('get_timetable').handler({ day: 'Wednesday' }, ctx);
+  it('the data read back from the database equals the seed files', async () => {
+    const { data: fromDb } = await makeDesk();
+    // The seed files carry two authoring-only keys (period labels and a category list) that the database does not need.
+    const { slots: _a, ...timetable } = data.timetable as typeof data.timetable & { slots?: unknown };
+    const { categories: _b, ...fees } = data.fees as typeof data.fees & { categories?: unknown };
+    expect(JSON.parse(JSON.stringify(fromDb))).toEqual(JSON.parse(JSON.stringify({ ...data, timetable, fees })));
+  });
+  it('reads the saved class from the student record when no year or section is given', async () => {
+    const { call } = await makeDesk();
+    const r: any = await call('get_timetable', { day: 'Wednesday' }, { confirmed: false });
     expect(r.classes.map((c: any) => c.course)).toContain('CS203');
     expect(r.scope).toMatch(/saved class/);
     expect(JSON.stringify(r)).not.toMatch(/section A|Year 2/);
   });
-  it('uses an explicit year and section when the visitor asks about another class', async () => {
-    const r: any = await by('get_timetable').handler({ day: 'Monday', year: 3, section: 'B' }, ctx);
+  it('uses an explicit year and section when asked about another class', async () => {
+    const { call } = await makeDesk();
+    const r: any = await call('get_timetable', { day: 'Monday', year: 3, section: 'B' }, { confirmed: false });
     expect(r.scope).toBe('Year 3 section B');
     expect(r.classes.map((c: any) => c.course)).toContain('CS302L');
   });
+  it('answers for the student\u2019s own class: a Year 3 student sees Year 3 notices and no Year 2 exams', async () => {
+    const { call } = await makeDesk({ year: 3, section: 'B', feeCategory: 'sponsored' });
+    const ex: any = await call('get_exam_dates', {}, { confirmed: false });
+    expect(ex.exams.every((e: any) => e.year === 3)).toBe(true);
+    expect(ex.exams.some((e: any) => e.course === 'CS301')).toBe(true);
+  });
   it('refuses a day it cannot read, and says how to ask', async () => {
-    const r: any = await by('get_timetable').handler({ day: 'someday' }, ctx);
+    const { call } = await makeDesk();
+    const r: any = await call('get_timetable', { day: 'someday' }, { confirmed: false });
     expect(r.ok).toBe(false);
     expect(r.reason).toMatch(/Use today, tomorrow/);
   });
   it('gives the amount for the private fee category without stating the category', async () => {
-    const r: any = await by('get_fee_dates').handler({ item: 'tuition' }, ctx);
+    const { call } = await makeDesk({ year: 2, section: 'A', feeCategory: 'scholarship' });
+    const r: any = await call('get_fee_dates', { item: 'tuition' }, { confirmed: false });
     expect(r.fees[0].amount).toBe(0);
-    expect(JSON.stringify(r)).not.toMatch(/fee_category|feeCategory/);
+    expect(JSON.stringify(r)).not.toMatch(/fee_category|feeCategory|scholarship/);
   });
-  it('validates reminder input with its schema', () => {
-    const schema = by('save_reminder').schema;
+  it('rejects bad arguments with a schema message', async () => {
+    const { call } = await makeDesk();
+    await expect(call('save_reminder', { title: 'Pay fee', date: '27 Nov' }, { confirmed: true })).rejects.toThrow(/does not match/);
+    await expect(call('save_reminder', { date: '2026-11-27' }, { confirmed: true })).rejects.toThrow(/title is required/);
+    await expect(call('search_notices', { limit: 99 }, { confirmed: false })).rejects.toThrow();
+    await expect(call('nope', {}, { confirmed: false })).rejects.toThrow(/no tool called/);
+  });
+  it('validates reminder input with the published schema', async () => {
+    const { catalog } = await makeDesk();
+    const schema = catalog.find((t) => t.name === 'save_reminder')!.schema;
     expect(checkSchema(schema, { title: 'Pay fee', date: '2026-11-27', time: '09:00' })).toEqual([]);
     expect(checkSchema(schema, { title: 'Pay fee', date: '27 Nov' }).join()).toMatch(/does not match/);
-    expect(checkSchema(schema, { date: '2026-11-27' }).join()).toMatch(/title is required/);
   });
-  it('saves a reminder once and describes it for the confirmation dialog', async () => {
-    const a = by('save_reminder');
-    expect(a.describe!({ title: 'Pay fee', date: '2026-11-27' } as never)).toBe('Save the reminder "Pay fee" for Fri 27 Nov 2026 in this browser only.');
-    await a.handler({ title: 'Pay fee', date: '2026-11-27' }, ctx);
-    await a.handler({ title: 'Pay fee', date: '2026-11-27' }, ctx);
-    expect(store.list()).toHaveLength(1);
+  it('saves a confirmed reminder once, and describes it for the confirm card', async () => {
+    const { actions, db, student } = await makeDesk();
+    const a = actions.find((x) => x.name === 'save_reminder')!;
+    expect(a.describe!({ title: 'Pay fee', date: '2026-11-27' } as never)).toBe('Save the reminder "Pay fee" for Fri 27 Nov 2026 to your Campus Desk account.');
+    await a.handler({ title: 'Pay fee', date: '2026-11-27' }, { sly: {}, origin: 'x' });
+    await a.handler({ title: 'Pay fee', date: '2026-11-27' }, { sly: {}, origin: 'x' });
+    expect(await listReminders(db, student.id, 'saved')).toHaveLength(1);
   });
-  it('falls back to the default class when private context is missing', () => expect(profileFromSly({})).toEqual({ year: 2, section: 'A', feeCategory: 'general' }));
+  it('an outside proposal stays pending until the student confirms it', async () => {
+    const { db, student } = await makeDesk();
+    const { result } = await runTool('save_reminder', { title: 'Study OS', date: '2026-12-01' }, { db, student, write: 'propose', source: 'Planner' });
+    expect(result.pending).toBe(true);
+    expect(await listReminders(db, student.id, 'saved')).toHaveLength(0);
+    const [p] = await listReminders(db, student.id, 'pending');
+    expect((await decideReminder(db, student.id, p!.id, 'saved'))?.status).toBe('saved');
+    expect(await listReminders(db, student.id, 'saved')).toHaveLength(1);
+  });
 });
 
-describe('reminders and calendar file', () => {
+describe('calendar file', () => {
   it('writes a valid calendar file with escaped text', () => {
     const ics = toIcs([{ id: 'r1', title: 'Pay fee, now; ok', date: '2026-11-27', time: '09:00' }, { id: 'r2', title: 'All day', date: '2026-11-28' }]);
     expect(ics).toMatch(/^BEGIN:VCALENDAR\r\n/);
@@ -141,24 +165,14 @@ describe('reminders and calendar file', () => {
     expect(ics).toContain('DTSTART;VALUE=DATE:20261128');
     expect(ics.trimEnd().endsWith('END:VCALENDAR')).toBe(true);
   });
-  it('removes a reminder', () => {
-    const s = new ReminderStore(memory());
-    const r = s.add({ title: 'x', date: '2026-11-27' });
-    s.remove(r.id);
-    expect(s.list()).toEqual([]);
-  });
-  it('survives broken storage', () => {
-    const bad = { getItem: () => '{not json', setItem: () => undefined };
-    expect(new ReminderStore(bad).list()).toEqual([]);
-    expect(new ProfileState(bad).load()).toEqual({ year: 2, section: 'A', feeCategory: 'general' });
-  });
 });
 
 describe('site clock', () => {
   it('is pinned to the sample date and can be overridden for a test', () => {
     expect(siteClock(data, '')).toEqual({ today: '2026-11-16', now: '2026-11-16T10:20' });
-    expect(siteClock(data, '?now=2026-11-18T08:30')).toEqual({ today: '2026-11-18', now: '2026-11-18T08:30' });
-    expect(siteClock(data, '?today=garbage')).toEqual({ today: '2026-11-16', now: '2026-11-16T10:20' });
+    expect(siteClock(data, '2026-11-18T08:30')).toEqual({ today: '2026-11-18', now: '2026-11-18T08:30' });
+    expect(siteClock(data, '2026-11-20')).toEqual({ today: '2026-11-20', now: '2026-11-20T08:00' });
+    expect(siteClock(data, 'garbage')).toEqual({ today: '2026-11-16', now: '2026-11-16T10:20' });
   });
 });
 
